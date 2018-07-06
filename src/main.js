@@ -16,6 +16,7 @@ export default {
       '^pages/index/main', //货源主页
       'pages/order/main', // 运单主页
       'pages/personal/main', // 个人主页
+      'pages/releaseGoods/main', //发布货源
     ],
     window: {
       backgroundTextStyle: 'light',

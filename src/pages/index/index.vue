@@ -84,7 +84,7 @@
         </div>
       </div>
     </div>
-    <div class="common-btn release-btn row main-bg-color">发布货源</div>
+    <div class="common-btn release-btn row main-bg-color" @click="releaseGoods">发布货源</div>
     <!-- 城市选择器组件 --start -->
     <block v-if="addressPickerView" >
       <city-select @selectCity="selectCity"></city-select>
@@ -120,6 +120,11 @@ export default {
     },
     searchBar() {
       this.isSearch = true;
+    },
+    releaseGoods() {
+      wx.navigateTo({
+        url:'../releaseGoods/main'
+      })
     },
     bindCancleSearch() {
       this.isSearch = false;
