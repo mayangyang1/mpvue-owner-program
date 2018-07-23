@@ -83,45 +83,79 @@ const logins = (_this, loginAccount, password, isBtn) => {
 /**
  * 封装微信的ajax
  */
-
-const ajax = (types, url, params, callfunc, attch) => {
-  var that = this;
-  if (url == '' || types == '') return;
-  var params = params || {};
-  var cookie = wx.getStorageSync('cookies');
-  var callfunc = callfunc || {};
-  wx.showNavigationBarLoading();
-  wx.request({
-    url: url,
-    header: { 'Content-Type': 'application/x-www-form-urlencoded', 'charset': 'UTF-8', 'Cookie': 'JSESSIONID=' + cookie },
-    method: types,
-    data: params,
-    success(res) {
-      if (res.data.code === 501) {
-        if (!(url.indexOf("/weixinLogin") > -1 || url.indexOf("/driver-api/freight/list") > -1)) {
-          var wxcode = wx.getStorageSync('wxcode');
-          wxLogin(code);
-          return;
+  const ajax = (types, url, params, callfunc, attch) => {
+    let that = this;
+    if(url == '' || types == '') return;
+    params = params || {};
+    let cookie = wx.getStorageSync('cookies');
+    callfunc = callfunc || {};
+    wx.showNavigationBarLoading();
+    wx.request({
+      url: url,
+      header: { 'Content-Type': 'application/x-www-form-urlencoded', 'charset': 'UTF-8', 'Cookie': 'JSESSIONID=' + cookie },
+      method: types,
+      data: params,
+      success(res) {
+        if(res.data.code === 501) { //用户没有登录
+          wx.redirectTo({ //调到登录页去登录
+            url: '../login/main'
+          })
         }
-      }
-      if (res.data.code === 500) {
-        return errorToast(res.data.content);
-      }
-      if (canVisitUrl(url)) {
-        callfunc.success(res, attch);
-      } else {
-        if ((isLogin(res) && callfunc.success)) {
-          callfunc.success(res, attch);
+        if(res.data.code === 500) {
+          return errorToast(res.data.content);
         }
+        if(isLogin(res) && callfunc.success){
+          callfunc.success(res, attch)
+        }
+      },
+      complete(res){
+        wx.hideNavigationBarLoading();
+        if (callfunc.complete) callfunc.complete(res, attch);
+      },
+      fail(res) {
+        if (callfunc.fail) callfunc.fail(res, attch);
       }
-    }, complete(res) {
-      wx.hideNavigationBarLoading();
-      if (callfunc.complete) callfunc.complete(res, attch);
-    }, fail(res) {
-      if (callfunc.fail) callfunc.fail(res, attch);
-    }
-  })
-}
+    })
+  }
+// 封装ajax----old
+// const ajax = (types, url, params, callfunc, attch) => {
+//   var that = this;
+//   if (url == '' || types == '') return;
+//   var params = params || {};
+//   var cookie = wx.getStorageSync('cookies');
+//   var callfunc = callfunc || {};
+//   wx.showNavigationBarLoading();
+//   wx.request({
+//     url: url,
+//     header: { 'Content-Type': 'application/x-www-form-urlencoded', 'charset': 'UTF-8', 'Cookie': 'JSESSIONID=' + cookie },
+//     method: types,
+//     data: params,
+//     success(res) {
+//       if (res.data.code === 501) {
+//         if (!(url.indexOf("/weixinLogin") > -1 || url.indexOf("/driver-api/freight/list") > -1)) {
+//           var wxcode = wx.getStorageSync('wxcode');
+//           wxLogin(code);
+//           return;
+//         }
+//       }
+//       if (res.data.code === 500) {
+//         return errorToast(res.data.content);
+//       }
+//       if (canVisitUrl(url)) {
+//         callfunc.success(res, attch);
+//       } else {
+//         if ((isLogin(res) && callfunc.success)) {
+//           callfunc.success(res, attch);
+//         }
+//       }
+//     }, complete(res) {
+//       wx.hideNavigationBarLoading();
+//       if (callfunc.complete) callfunc.complete(res, attch);
+//     }, fail(res) {
+//       if (callfunc.fail) callfunc.fail(res, attch);
+//     }
+//   })
+// }
 /**
  * 获取code后登陆
  */
@@ -184,11 +218,12 @@ const login = (code, encryptedData, iv, skip, loginAccount, password, isBtn) => 
 */
 const isLogin = (res) => {
   var that = this;
-  if (res.statusCode === 401) {
-    logins(that);
+  if (res.statusCode === 401) { //session失效
+    wx.redirectTo({
+      url: '../login/main'
+    })
     return false;
   } else {
-    wx.setStorageSync("login", 0);
     return true;
   }
 }
@@ -498,8 +533,6 @@ const monthData = ['01月', '02月', '03月', '04月', '05月', '06月', '07月'
 const dayData = ['01日', '02日', '03日', '04日', '05日', '06日', '07日', '08日', '09日', '10日', '11日', '12日', '13日', '14日', '15日', '16日', '17日', '18日', '19日', '20日', '21日', '22日', '23日', '24日', '25日', '26日', '27日', '28日', '29日', '30日', '31日'];
 const hourData = ['00时', '01时', '02时', '03时', '04时', '05时', '06时', '07时', '08时', '09时', '10时', '11时', '12时', '13时', '14时', '15时', '16时', '17时', '18时', '19时', '20时', '21时', '22时', '23时'];
 const minuteData = ['00分', '01分', '0分', '02分', '03分', '04分', '05分', '06分', '07分', '08分', '09分', '10分', '11分', '12分', '13分', '14分', '15分', '16分', '17分', '18分', '19分', '20分', '21分', '22分', '23分', '24分', '25分', '26分', '27分', '28分', '29分', '30分', '31分', '32分', '33分', '34分', '35分', '36分', '37分', '38分', '39分', '40分', '41分', '42分', '43分', '44分', '45分', '46分', '47分', '48分', '49分', '50分', '51分', '52分', '53分', '54分', '55分', '56分', '57分', '58分', '59分'];
-
-
 
 
 export {

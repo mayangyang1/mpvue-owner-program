@@ -14,7 +14,7 @@
       <div class="common-btn search-btn main-bg-color row" @click="bindSearch">搜索</div>
     </div>
     <div class="order-list">
-      <div class="order-item pdlr20 mgb20">
+      <div class="order-item pdlr20 mgb20" @click="bindOrderDetail">
         <div class="order-address flex-sb">
           <div class="address flex-fs">
             <text>上海市 浦东新区</text>
@@ -93,6 +93,11 @@ export default {
     },
     bindSearch() {
       this.isSearch = false;
+    },
+    bindOrderDetail() {
+      wx.navigateTo({
+        url: '../waybillDetail/main'
+      })
     },
     // 地址选择组件 --start
     bindSelectArea(e) {

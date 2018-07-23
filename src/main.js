@@ -17,6 +17,10 @@ export default {
       'pages/order/main', // 运单主页
       'pages/personal/main', // 个人主页
       'pages/releaseGoods/main', //发布货源
+      'pages/waybillDetail/main', //运单详情
+      'pages/goodsDetails/main', // 货源详情
+      'pages/sendCar/main', //派车页面
+      'pages/login/main', //登录页面
     ],
     window: {
       backgroundTextStyle: 'light',

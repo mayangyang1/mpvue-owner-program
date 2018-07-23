@@ -149,12 +149,11 @@
         </label>
       </checkbox-group>
       <div>同意</div>
-      <div class="main-color">《货物运输合同》</div>
+      <div class="main-color" @click="bindTransportRegiest">《货物运输合同》</div>
     </div>
     <div class="common-bg">
       <div class="common-btn row main-bg-color">确认发布</div>
     </div>
-    
 
     <!-- 日期选择器组件 --start -->
     <block v-if="isChoiceTime">
@@ -191,7 +190,7 @@ export default {
       isAgree: false,
       isChoiceTime: false,
       nowTime: '',
-      _ind: 0
+      _ind: '0'
     }
   },
   methods:{
@@ -207,6 +206,11 @@ export default {
     selectDate(isChoice, _value) {
       this.isChoiceTime = isChoice;
       this.nowTime = _value;
+    },
+    bindTransportRegiest() {//跳转到协议页面
+      wx.navigateTo({
+        url: '../agreement/main'
+      })
     }
   },
   created () {

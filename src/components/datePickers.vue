@@ -76,7 +76,7 @@ export default {
         that.nowTime = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':00';
         that.$emit('selectDate', false, that.nowTime);
     },
-    isDayNumber(month) {
+    isDayNumber(month) { //判断月份确定每月的天数
         var dayNumber = '';
         if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
             return dayNumber = 31;
@@ -86,7 +86,7 @@ export default {
             return dayNumber = 28;
         }
     },
-    getDataNumber() {
+    getDataNumber() { 
         var that = this;
         if(that.isLeapYear(that.yearData[0].slice(0,4))){//为润年
             if(that.isDayNumber(that.monthData[that.month_index].slice(0,2)) == 31){

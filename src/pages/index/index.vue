@@ -11,7 +11,7 @@
       <div class="common-btn search-btn main-bg-color row" @click="bindSearch">搜索</div>
     </div>
     <div class="goods-list">
-      <div class="goods-item mgt20 pdb20">
+      <div class="goods-item mgt20 pdb20" @click="bindGoodsDetails">
         <div class="goods-header pdlr20 flex-sb">
           <div class="number">货源编号: 20180705Y000567</div>
           <div class="update-time">2018-07-05 12:22</div>
@@ -32,7 +32,7 @@
             <div class="have-car">已有 1 人接货</div>
             <div class="need-car">已派:1 &nbsp; 待派:0</div>
           </div>
-          <div class="mini-button row main-bg-color">去派车</div>
+          <div class="mini-button row main-bg-color" @click.stop="bindDriverCar">去派车</div>
         </div>
       </div>
       <div class="goods-item mgt20 pdb20">
@@ -115,6 +115,11 @@ export default {
   },
 
   methods: {
+    bindDriverCar() {
+      wx.navigateTo({
+        url: '../sendCar/main'
+      })
+    },
     bindSearch() {
       this.isSearch = false;
     },
@@ -124,6 +129,11 @@ export default {
     releaseGoods() {
       wx.navigateTo({
         url:'../releaseGoods/main'
+      })
+    },
+    bindGoodsDetails() {
+      wx.navigateTo({
+        url: '../goodsDetails/main'
       })
     },
     bindCancleSearch() {

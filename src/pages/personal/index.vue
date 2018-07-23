@@ -16,8 +16,8 @@
           <div class="cont">中心总部</div>
         </div>
       </div>
-      <div class="flex-sb set mgt20 pdlr20">
-        <div class="title">设置</div>
+      <div class="flex-sb set mgt20 pdlr20" @click="login">
+        <div class="title">登录</div>
         <img src="/static/images/arrow.png" alt="">
       </div>
   </div>
@@ -36,7 +36,13 @@ export default {
 
     }
   },
-
+  methods: {
+    login() {
+      wx.navigateTo({
+        url: '../login/main'
+      })
+    }
+  },
   created () {
 
   }
